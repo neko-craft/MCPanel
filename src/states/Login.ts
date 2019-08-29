@@ -89,12 +89,16 @@ export default class Login extends Model {
       okType: 'danger',
       onOk: () => {
         this.loading2 = message.loading('退出登录中...')
-        this.socket.s.send('quit|' + this.token)
+        this.socket.s.send('quit|{"token":"' + this.token + '"}')
       }
     })
   }
 
-  public quitReceive (data: { token: string }) {
+  public quitReceive (data: { error: string, token: string }) {
+    if (data.error) {
+      message.error(data.error, 5)
+      return
+    }
     if (data.token !== this.token) return
     localStorage.removeItem('token')
     this.token = ''

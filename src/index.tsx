@@ -12,4 +12,4 @@ moment.locale('zh')
 
 ReactDOM.render(<ConfigProvider locale={zhCN}><App /></ConfigProvider>, document.getElementById('root'))
 
-serviceWorker.unregister()
+serviceWorker.register()

@@ -13,7 +13,7 @@ const Maps: React.FC = () => {
           width='100%'
           height='100%'
           frameBorder='none'
-          src='http://play.menhera.io:8123'
+          src='http://play.nekocraft.net:8123'
         />
       </Spin>
     </div>

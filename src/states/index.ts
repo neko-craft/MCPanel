@@ -27,7 +27,10 @@ const mapping = {
 
 const f = () => {
   const close = message.loading('连接服务器中...')
-  socket.s = new WebSocket('ws://127.0.0.1:8080/ws')
+  socket.s = new WebSocket(process.env.NODE_ENV === 'production'
+    ? 'ws://play.nekocraft.net:8124/ws'
+    : 'ws://127.0.0.1:8080/ws'
+  )
   socket.s.onmessage = ({ data }) => {
     if (!data) return
     const d = JSON.parse(data)
