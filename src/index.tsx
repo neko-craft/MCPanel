@@ -1,12 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import 'moment/locale/zh-cn'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+import zhCN from 'antd/es/locale/zh_CN'
+import * as moment from 'moment'
+import * as serviceWorker from './serviceWorker'
+import { ConfigProvider } from 'antd'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+moment.locale('zh')
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(<ConfigProvider locale={zhCN}><App /></ConfigProvider>, document.getElementById('root'))
+
+serviceWorker.unregister()

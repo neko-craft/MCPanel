@@ -1,0 +1,11 @@
+#list .card .ant-card-body {
+  padding: 0 24px 4px;
+}
+
+#list .card.players .ant-card-body {
+  padding: 1px 0 0;
+}
+
+#list .ant-col {
+  margin: 8px 0;
+}

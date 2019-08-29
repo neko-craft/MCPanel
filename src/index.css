@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#root, section {
+  height: 100%;
+}
+
+.no-padding .ant-drawer-body, .no-padding .ant-drawer-header {
+  padding: 0;
+}
+
+.mcp-content {
+  margin-top: -8px;
+  padding: 24px;
+}
