@@ -6,7 +6,7 @@ import Markdown from 'react-markdown'
 const About: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState('')
-  useEffect(() => void fetch('about.md')
+  useEffect(() => void fetch('about_content.md')
     .then(it => it.text())
     .then(setData)
     .catch(console.error)
