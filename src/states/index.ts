@@ -28,7 +28,7 @@ const mapping = {
 const f = () => {
   const close = message.loading('连接服务器中...')
   socket.s = new WebSocket(process.env.NODE_ENV === 'production'
-    ? 'ws://play.nekocraft.net:18124/ws'
+    ? 'ws://hz.apisium.cn:9124/ws'
     : 'ws://127.0.0.1:8080/ws'
   )
   socket.s.onmessage = ({ data }) => {

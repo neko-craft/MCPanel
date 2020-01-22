@@ -2,9 +2,7 @@
 
 ## 服务器地址
 
-- 自动解析: **nekocraft.net**
-- 电信: **dx.nekocraft.net**
-- 联通: **lt.nekocraft.net**
+- **n.apisium.cn**
 
 ## 服务器特点
 

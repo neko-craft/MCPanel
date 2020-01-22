@@ -18,7 +18,7 @@ const Home: React.FC = () => {
             className='address'
             title='服务器地址'
             value=''
-            prefix={<Typography.Title copyable level={4}>nekocraft.net</Typography.Title>}
+            prefix={<Typography.Title copyable level={4}>n.apisium.cn</Typography.Title>}
           />
         </Card>
       </Col>

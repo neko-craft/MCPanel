@@ -13,7 +13,7 @@ const Maps: React.FC = () => {
           width='100%'
           height='100%'
           frameBorder='none'
-          src='http://play.nekocraft.net:18123'
+          src='http://hz.apisium.net:9123'
         />
       </Spin>
     </div>
