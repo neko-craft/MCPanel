@@ -13,6 +13,9 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>NekoCraft | 用户中心</title>
     <script type="text/javascript">
+      if (location.protocol === 'https:') {
+        location.protocol = 'http:'
+      }
       (function(l) {
         if (l.search) {
           var q = {}
