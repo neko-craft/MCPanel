@@ -24,7 +24,7 @@ const Home: React.FC = () => {
       </Col>
       <Col span={12} sm={6}>
         <Card hoverable>
-          <Statistic title='游戏版本' value='1.14.4' />
+          <Statistic title='游戏版本' value='1.15.2' />
         </Card>
       </Col>
       <Col span={12} sm={6}>
