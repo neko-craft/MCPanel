@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon } from 'antd'
+import Icon from '@ant-design/icons/lib/components/Icon'
 
 // tslint:disable:max-line-length
 const Svg = () => (
@@ -8,4 +8,5 @@ const Svg = () => (
   </svg>
 )
 
-export default () => <Icon component={Svg} />
+const props: any = { component: Svg }
+export default () => React.createElement(Icon, props)

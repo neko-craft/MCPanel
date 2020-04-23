@@ -1,4 +1,4 @@
-import { Model } from '../state'
+import { Store, NOT_PROXY } from 'reqwq'
 import moment from 'moment'
 
 export interface PlayerInfo {
@@ -20,7 +20,7 @@ interface BanInfo {
   source: string
 }
 
-export default class List extends Model {
+export default class List extends Store {
   public players: PlayerInfo[] = []
   public banList: BanInfo[] = []
 
@@ -43,14 +43,13 @@ export default class List extends Model {
       it.registerTimeText = moment(it.registerTime).format('YYYY/MM/DD HH:mm:ss')
       p[it.name] = it
     })
-    this.players = Object.values(p)
-    this.banList = data.ban.map(it => ({
+    this.players = Object.defineProperty(Object.values(p), NOT_PROXY, { value: true })
+    this.banList = Object.defineProperty(data.ban.map(it => ({
       name: it.name,
       reason: it.reason,
       from: moment(it.from).format('LLLL'),
       to: it.to && moment(it.to).format('LLLL'),
       source: it.source
-    }))
-    console.log(this.banList)
+    })), NOT_PROXY, { value: true })
   }
 }

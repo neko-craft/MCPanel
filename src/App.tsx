@@ -1,17 +1,18 @@
 import './App.css'
 import React, { useState } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { Typography, Layout, Icon, Drawer, BackTop } from 'antd'
+import { Typography, Layout, Drawer, BackTop } from 'antd'
 import { Menus, Routes } from './Routes'
+import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined'
+import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined'
 import Login from './components/Login'
 import Chat from './components/Chat'
-import Provider from './states/index'
+import Provider from './stores/index'
 
 const { Header, Sider, Content } = Layout
 
 const App: React.FC = () => {
   const [collapsed, updateCollapsed] = useState(window.innerWidth < 992)
-  const toggle = () => updateCollapsed(!collapsed)
   const [drawer, updateDrawer] = useState(false)
 
   return (
@@ -47,12 +48,9 @@ const App: React.FC = () => {
               position: 'fixed',
               width: '100%',
               zIndex: 1
-            }} >
-              <Icon
-                className='trigger'
-                type={collapsed ? 'menu-unfold' : 'menu-fold'}
-                onClick={toggle}
-              />
+            }}>
+              {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+                { className: 'trigger', onClick () { updateCollapsed(!collapsed) } } as any)}
               <Typography.Title level={3}>NekoCraft</Typography.Title>
             </Header>
             <Chat />

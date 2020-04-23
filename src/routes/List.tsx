@@ -1,7 +1,7 @@
 import './List.css'
 import React, { useEffect } from 'react'
-import ListModel, { PlayerInfo } from '../states/List'
-import { useModel } from '../state'
+import ListModel, { PlayerInfo } from '../stores/List'
+import { useStore } from 'reqwq'
 import { Row, Col, Card, List, Avatar, Popover, Button, Tag, Table } from 'antd'
 
 const columns = [
@@ -31,8 +31,10 @@ const columns = [
 ]
 
 const ListPage: React.FC = () => {
-  const store = useModel(ListModel)
+  const store = useStore(ListModel)
   useEffect(store.getList, [])
+  ;(window as any).ee = store
+
   return (
     <Row id='list' className='mcp-content' gutter={16}>
       <Col span={24} sm={12}>
@@ -56,8 +58,8 @@ const ListPage: React.FC = () => {
                       <p>封禁者: {it.source}</p>
                       <p>封禁时间: {it.from}</p>
                       <p>解除时间: {it.to || '无'}</p>
-                    </>)}>
-                    <Button type='link'>查看更多</Button></Popover></>)}
+                    </>)}><Button type='link'>查看更多</Button></Popover></>
+                  )}
                 />
               </List.Item>
             )}
@@ -65,15 +67,15 @@ const ListPage: React.FC = () => {
         </Card>
       </Col>
       <Col span={24} sm={12}>
-      <Card title='玩家列表' className='card players'>
-        <Table
-          rowKey='name'
-          columns={columns}
-          dataSource={store.players}
-          scroll={{ x: 'max-content' }}
-          pagination={false}
-        />
-      </Card>
+        <Card title='玩家列表' className='card players'>
+          <Table
+            rowKey='name'
+            columns={columns}
+            dataSource={store.players}
+            scroll={{ x: 'max-content' }}
+            pagination={false}
+          />
+        </Card>
       </Col>
     </Row>
   )

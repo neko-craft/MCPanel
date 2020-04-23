@@ -1,17 +1,17 @@
 import { message } from 'antd'
-import { getProvider } from '../state'
+import { newInstance, NOT_PROXY } from 'reqwq'
 import Home from './Home'
 import Chat from './Chat'
 import Login from './Login'
 import List from './List'
 
-const socket: { s: WebSocket } = { s: null }
-const Provider = getProvider(new Home(), new Chat(socket), new Login(socket), new List(socket))
+const socket: { s: WebSocket, [NOT_PROXY]: true } = { s: null, [NOT_PROXY]: true }
+const Provider = newInstance(new Home(), new Login(socket), new Chat(socket), new List(socket))
 
-const homeModel = Provider.getModel(Home)
-const chatModel = Provider.getModel(Chat)
-const loginModel = Provider.getModel(Login)
-const listModel = Provider.getModel(List)
+const homeModel = Provider.getStore(Home)
+const chatModel = Provider.getStore(Chat)
+const loginModel = Provider.getStore(Login)
+const listModel = Provider.getStore(List)
 
 const mapping = {
   status: homeModel.setStatus,
@@ -27,10 +27,7 @@ const mapping = {
 
 const f = () => {
   const close = message.loading('连接服务器中...')
-  socket.s = new WebSocket(process.env.NODE_ENV === 'production'
-    ? 'ws://hz.apisium.cn:9124/ws'
-    : 'ws://127.0.0.1:8080/ws'
-  )
+  socket.s = new WebSocket('ws://hz.apisium.cn:9124/ws')
   socket.s.onmessage = ({ data }) => {
     if (!data) return
     const d = JSON.parse(data)

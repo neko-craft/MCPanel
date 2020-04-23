@@ -1,4 +1,4 @@
-import { Model } from '../state'
+import { Store, NOT_PROXY } from 'reqwq'
 
 interface PlayerStatus {
   name: string
@@ -7,12 +7,12 @@ interface PlayerStatus {
   fishing: boolean
 }
 
-export default class Home extends Model {
+export default class Home extends Store {
   public players: PlayerStatus[] = []
   public tps = 20
 
   public setStatus (json: { players: PlayerStatus[], tps: number }) {
-    this.players = json.players
+    this.players = Object.defineProperty(json.players, NOT_PROXY, { value: true })
     this.tps = json.tps
   }
 }

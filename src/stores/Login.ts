@@ -1,10 +1,10 @@
 import { message, Modal } from 'antd'
-import { Model } from '../state'
-import { MessageType } from 'antd/lib/message'
+import { Store } from 'reqwq'
+import { MessageType } from 'antd/es/message'
 
 const { confirm } = Modal
 
-export default class Login extends Model {
+export default class Login extends Store {
   public token = ''
   public name = ''
   public banned = false
@@ -27,8 +27,13 @@ export default class Login extends Model {
     this.socket.s.send(`token|{"token":"${token}"}`)
   }
 
-  public tokenReceive (data: { error: string, name: string, banned: boolean,
-    whiteList: boolean, needWhiteList: boolean }) {
+  public tokenReceive (data: {
+    error: string
+    name: string
+    banned: boolean
+    whiteList: boolean
+    needWhiteList: boolean
+  }) {
     this.loading()
     if (data.error) {
       this.step = 0
@@ -44,32 +49,22 @@ export default class Login extends Model {
       this.cacheToken = ''
       this.name = data.name
       this.banned = data.banned
-      this.whiteList = this.whiteList
-      this.needWhiteList = this.needWhiteList
+      this.whiteList = data.whiteList
+      this.needWhiteList = data.needWhiteList
     }
   }
 
-  public setLoginLoading (value: boolean) {
-    this.loginLoading = value
-  }
-
-  public setStep (value: number) {
-    this.step = value
-  }
-
-  public login (validateFields: () => Promise<any>) {
-    this.setLoginLoading(true)
-    validateFields()
-      .then(data => {
-        this.socket.s.send('login|' + JSON.stringify(data))
-        this.setStep(1)
-      })
-      .catch(e => {
-        console.error(e)
-        message.error('发生错误!', 5)
-        this.setStep(0)
-      })
-      .finally(() => this.setLoginLoading(false))
+  public login (values: any) {
+    this.loginLoading = true
+    try {
+      this.socket.s.send('login|' + JSON.stringify(values))
+      this.step = 1
+    } catch (e) {
+      console.error(e)
+      message.error('发生错误!', 5)
+      this.step = 0
+    }
+    this.loginLoading = false
   }
 
   public loginReceive (data: { error: string, token: string }) {

@@ -1,15 +1,15 @@
 import './Home.css'
 import React, { useEffect, useState } from 'react'
-import HomeModel from '../states/Home'
+import HomeModel from '../stores/Home'
 
 import Markdown from 'react-markdown'
-import { useModel } from '../state'
+import { useStore } from 'reqwq'
 import { Row, Col, Card, List, Avatar, Statistic, Typography, Tag } from 'antd'
 
 const Home: React.FC = () => {
   const [text, setText] = useState('')
   useEffect(() => void fetch('./notice.md').then(it => it.text()).then(setText).catch(console.error), [])
-  const store = useModel(HomeModel)
+  const store = useStore(HomeModel)
   return (
     <Row id='home' className='mcp-content' gutter={16}>
       <Col span={12} sm={6}>
@@ -42,7 +42,7 @@ const Home: React.FC = () => {
           <List
             itemLayout='horizontal'
             dataSource={store.players}
-            renderItem={item => (
+            renderItem={(item: any) => (
               <List.Item>
                 <List.Item.Meta
                   avatar={

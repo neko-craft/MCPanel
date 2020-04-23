@@ -1,5 +1,5 @@
 import LoginModel from './Login'
-import { Model } from '../state'
+import { Store } from 'reqwq'
 
 interface Message {
   name: string
@@ -19,7 +19,7 @@ const scroll = () => {
   }
 }
 
-export default class Chat extends Model {
+export default class Chat extends Store {
   public messages: Message[] = []
   public hasNew = false
   public value = ''
@@ -36,7 +36,7 @@ export default class Chat extends Model {
       name: json.name,
       message: json.message,
       time: Date.now(),
-      right: this.getModel(LoginModel).name === json.name
+      right: this.getStore(LoginModel).name === json.name
     })
     this.hasNew = true
   }

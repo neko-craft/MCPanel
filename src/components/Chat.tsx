@@ -1,16 +1,20 @@
+/* eslint-disable react/jsx-curly-newline */
 import './Chat.css'
 import TimeAgo from 'timeago-react'
 import SendIcon from './SendIcon'
-import LoginModel from '../states/Login'
-import ChatModel, { setDom } from '../states/Chat'
+import LoginModel from '../stores/Login'
+import _MessageTwoTone from '@ant-design/icons/MessageTwoTone'
+import ChatModel, { setDom } from '../stores/Chat'
 import React, { useState, useRef } from 'react'
-import { Badge, Icon, Drawer, Input, Avatar, Card, Tag } from 'antd'
-import { useModel } from '../state'
+import { Badge, Drawer, Input, Avatar, Card, Tag } from 'antd'
+import { useStore } from 'reqwq'
+
+const MessageTwoTone: any = _MessageTwoTone
 
 const Chat: React.FC = () => {
   const ref = useRef<HTMLDivElement>()
-  const store = useModel(ChatModel)
-  const login = useModel(LoginModel)
+  const store = useStore(ChatModel)
+  const login = useStore(LoginModel)
   const [visible, _setVisible] = useState(false)
   const setVisible = (value: boolean) => {
     store.clearState()
@@ -25,10 +29,8 @@ const Chat: React.FC = () => {
   return (
     <>
       <Badge className='chat-icon' count={+store.hasNew} dot>
-        <Icon
+        <MessageTwoTone
           style={{ fontSize: '28px' }}
-          type='message'
-          theme='twoTone'
           onClick={() => setVisible(true)}
         />
       </Badge>
@@ -61,12 +63,12 @@ const Chat: React.FC = () => {
           ? login.banned
             ? <Input.Search placeholder='你已被封禁!' disabled enterButton={<SendIcon />} />
             : <Input.Search
-                placeholder='请输入聊天内容...'
-                onSearch={store.chat}
-                value={store.value}
-                onChange={store.setValue}
-                enterButton={<SendIcon />}
-              />
+              placeholder='请输入聊天内容...'
+              onSearch={store.chat}
+              value={store.value}
+              onChange={store.setValue}
+              enterButton={<SendIcon />}
+            />
           : <Input.Search placeholder='你还没有登录!' disabled enterButton={<SendIcon />} />
         }
       </Drawer>

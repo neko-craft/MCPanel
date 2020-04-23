@@ -1,35 +1,40 @@
 import React from 'react'
-import useReactRouter from 'use-react-router'
-import { Menu, Icon } from 'antd'
+import { Menu } from 'antd'
+import { useLocation } from 'react-router'
 import { Switch, Link, Redirect, Route } from 'react-router-dom'
+
+import HomeOutlined from '@ant-design/icons/HomeOutlined'
+import CompassOutlined from '@ant-design/icons/CompassOutlined'
+import UnorderedListOutlined from '@ant-design/icons/UnorderedListOutlined'
+import QuestionOutlined from '@ant-design/icons/QuestionOutlined'
 
 import Home from './routes/Home'
 import Maps from './routes/Maps'
 import List from './routes/List'
 import About from './routes/About'
 
-const routes = [
+const routes: Array<{ path: string, icon: any, name: string, component: any }> = [
   {
     path: '/home',
-    icon: 'home',
+    icon: HomeOutlined,
     name: '主页',
     component: Home
   },
   {
     path: '/maps',
-    icon: 'compass',
+    icon: CompassOutlined,
     name: '地图',
     component: Maps
   },
   {
     path: '/list',
-    icon: 'unordered-list',
+    icon: UnorderedListOutlined,
     name: '封禁与白名单',
     component: List
   },
   {
     path: '/about',
-    icon: 'question',
+    icon: QuestionOutlined,
     name: '萌新必看',
     component: About
   }
@@ -43,18 +48,17 @@ const Routes: React.FC = () => (
   </Switch>
 )
 
-const routeMenus = routes.map(({ path, icon, name }) => (
+const routeMenus = routes.map(({ path, name, icon: Icon }) => (
   <Menu.Item key={path}>
     <Link to={path}>
-      <Icon type={icon} />
+      <Icon />
       <span>{name}</span>
     </Link>
   </Menu.Item>
 ))
 
 const Menus: React.FC<{ theme?: undefined | 'dark' }> = ({ theme }) => {
-  const { location: { pathname } } = useReactRouter()
-  return <Menu theme={theme} mode='inline' selectedKeys={[pathname]}>{routeMenus}</Menu>
+  return <Menu theme={theme} mode='inline' selectedKeys={[useLocation().pathname]}>{routeMenus}</Menu>
 }
 
 export { Menus, Routes }
