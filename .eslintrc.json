@@ -25,6 +25,7 @@
   },
   "plugins": [
     "react",
+    "jsx-a11y",
     "@typescript-eslint"
   ],
   "settings": {

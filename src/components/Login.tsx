@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable react/jsx-curly-newline, jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react'
 import LoginModel from '../stores/Login'
 import HomeModel from '../stores/Home'
