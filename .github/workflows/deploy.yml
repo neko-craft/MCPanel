@@ -28,12 +28,12 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: dist
-          path: build
+          path: dist
 
       - name: Deploy
         uses: crazy-max/ghaction-github-pages@v1
         with:
-          build_dir: build
+          build_dir: dist
           committer_email: 764798966@qq.com
           fqdn: user.n.apisium.cn
         env:
