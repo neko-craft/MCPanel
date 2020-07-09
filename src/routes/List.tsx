@@ -1,8 +1,28 @@
 import './List.css'
-import React, { useEffect } from 'react'
-import ListModel, { PlayerInfo } from '../stores/List'
-import { useStore } from 'reqwq'
+import moment from 'moment'
+import React, { useEffect, useState } from 'react'
 import { Row, Col, Card, List, Avatar, Popover, Button, Tag, Table } from 'antd'
+import socket from '../io'
+
+export interface PlayerInfo {
+  banned?: boolean
+  lastLogin: number
+  lastLoginText: string
+  name: string
+  isOp?: boolean
+  firstPlayed: number
+  firstPlayedText: string
+  onlineTime: number
+  onlineTimeText: string
+}
+
+interface BanInfo {
+  name: string
+  reason: string
+  from: string
+  to?: string
+  source: string
+}
 
 const columns = [
   {
@@ -14,26 +34,51 @@ const columns = [
           shape='square'
           size='large'
           src={`https://minotar.net/helm/${it}/40.png`}
-        />&nbsp;&nbsp;{it} {p.op && <Tag color='geekblue'>管理员</Tag>}{p.banned && <Tag color='red'>已被封禁</Tag>}
+        />&nbsp;&nbsp;{it} {p.isOp && <Tag color='geekblue'>管理员</Tag>}{p.banned && <Tag color='red'>已被封禁</Tag>}
       </>
     )
   },
   {
+    title: '在线时间',
+    dataIndex: 'onlineTimeText',
+    sorter: (a: PlayerInfo, b: PlayerInfo) => b.onlineTime - a.onlineTime
+  },
+  {
     title: '最后登录',
-    dataIndex: 'loginTimeText',
-    sorter: (a: PlayerInfo, b: PlayerInfo) => a.loginTime - b.loginTime
+    dataIndex: 'lastLoginText',
+    sorter: (a: PlayerInfo, b: PlayerInfo) => b.lastLogin - a.lastLogin
   },
   {
     title: '注册时间',
-    dataIndex: 'registerTimeText',
-    sorter: (a: PlayerInfo, b: PlayerInfo) => a.registerTime - b.registerTime
+    dataIndex: 'firstPlayedText',
+    sorter: (a: PlayerInfo, b: PlayerInfo) => b.firstPlayed - a.firstPlayed
   }
 ]
 
 const ListPage: React.FC = () => {
-  const store = useStore(ListModel)
-  useEffect(store.getList, [])
-  ;(window as any).ee = store
+  const [list, setList] = useState<PlayerInfo[]>([])
+  const [banList, setBanList] = useState<BanInfo[]>([])
+  useEffect(() => {
+    socket.emit('list', (listJson: string, banListJson: string) => {
+      const banList1: BanInfo[] = JSON.parse(banListJson)
+      const obj: Record<string, void> = { }
+      banList1.forEach(it => {
+        obj[it.name] = null
+        it.from = moment(it.from).format('LLLL')
+        if (it.to) it.to = moment(it.to).format('LLLL')
+      })
+      const list1: PlayerInfo[] = JSON.parse(listJson)
+      list1.forEach(it => {
+        it.lastLoginText = moment(it.lastLogin).format('YYYY/MM/DD HH:mm:ss')
+        it.firstPlayedText = moment(it.firstPlayed).format('YYYY/MM/DD HH:mm:ss')
+        console.log(it.onlineTime)
+        it.onlineTimeText = moment.duration(it.onlineTime / 20, 'seconds').humanize()
+        if (it.name in obj) it.banned = true
+      })
+      setList(list1)
+      setBanList(banList1)
+    })
+  }, [])
 
   return (
     <Row id='list' className='mcp-content' gutter={16}>
@@ -41,7 +86,7 @@ const ListPage: React.FC = () => {
         <Card title='封禁列表' className='card'>
           <List
             itemLayout='horizontal'
-            dataSource={store.banList}
+            dataSource={banList}
             renderItem={it => (
               <List.Item>
                 <List.Item.Meta
@@ -71,7 +116,7 @@ const ListPage: React.FC = () => {
           <Table
             rowKey='name'
             columns={columns}
-            dataSource={store.players}
+            dataSource={list}
             scroll={{ x: 'max-content' }}
             pagination={false}
           />

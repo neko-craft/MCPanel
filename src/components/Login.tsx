@@ -1,54 +1,103 @@
 /* eslint-disable react/jsx-curly-newline, jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react'
-import LoginModel from '../stores/Login'
-import HomeModel from '../stores/Home'
+import React, { useState, useEffect } from 'react'
 import Item from 'antd/es/form/FormItem'
-import { useStore } from 'reqwq'
-import { useForm } from 'antd/es/form/util'
-import { Avatar, Menu, Modal, Steps, Form, Input,
+import { Avatar, Menu, Modal, Steps, Form, Input, message,
   Button, Spin, Result, Tooltip, Row, Col, Select, Dropdown } from 'antd'
+import Chat from './Chat'
+import socket from '../io'
 
-import _UserOutlined from '@ant-design/icons/UserOutlined'
-import _SolutionOutlined from '@ant-design/icons/SolutionOutlined'
-import _SmileOutlined from '@ant-design/icons/SmileOutlined'
-import _FlagOutlined from '@ant-design/icons/FlagOutlined'
-
-const FlagOutlined: any = _FlagOutlined
-const SmileOutlined: any = _SmileOutlined
-const SolutionOutlined: any = _SolutionOutlined
-const UserOutlined: any = _UserOutlined
+import UserOutlined from '@ant-design/icons/UserOutlined'
+import SolutionOutlined from '@ant-design/icons/SolutionOutlined'
+import SmileOutlined from '@ant-design/icons/SmileOutlined'
+import FlagOutlined from '@ant-design/icons/FlagOutlined'
 const { Step } = Steps
+const { confirm } = Modal
 
 const Login: React.FC = () => {
+  const [step, setStep] = useState(0)
   const [visible, setVisible] = useState(false)
-  const store = useStore(LoginModel)
-  const { players } = useStore(HomeModel)
-  const [form] = useForm()
+  const [players, setPlayers] = useState<string[]>([])
+  const [name, setName] = useState<string>()
+  const [banned, setBanned] = useState(false)
+  const [form] = Form.useForm()
+
   const closeModel = () => setVisible(false)
+  const getInfo = () => {
+    const token = localStorage.getItem('token')
+    const uuid = localStorage.getItem('uuid')
+    if (!token || !uuid) return
+    socket.emit('token', { token, uuid }, (err: string | undefined, name: string, banned: boolean) => {
+      if (err) {
+        message.error(err, 5)
+        localStorage.removeItem('token')
+        localStorage.removeItem('uuid')
+      } else {
+        setName(name)
+        setBanned(banned)
+      }
+    })
+  }
+
+  useEffect(() => {
+    getInfo()
+    const fn = (json: string) => setPlayers(JSON.parse(json).map(it => it.name))
+    const fn2 = (err: string | undefined, token: string, uuid: string) => {
+      if (err) {
+        message.error(err, 5)
+        setStep(0)
+      } else {
+        localStorage.setItem('token', token)
+        localStorage.setItem('uuid', uuid)
+        getInfo()
+        setStep(2)
+      }
+    }
+    socket.on('status', fn).on('login', fn2).on('reconnect', getInfo)
+    return () => socket.off('status', fn).off('login', fn2).off('reconnect', getInfo)
+  }, [])
 
   return (
     <>
-      {store.token
+      <Chat playerName={name} banned={banned} />
+      {name
         ? (<Dropdown
           overlay={(<Menu>
-            <Menu.Item key='0' disabled>用户名: {store.name}</Menu.Item>
-            <Menu.Item key='2' disabled>{store.banned ? '已被封禁' : '状态正常'}</Menu.Item>
+            <Menu.Item key='0' disabled>用户名: {name}</Menu.Item>
+            <Menu.Item key='2' disabled>{banned ? '已被封禁' : '状态正常'}</Menu.Item>
             <Menu.Divider />
             <Menu.Item key='1'>
-              <a onClick={store.quit}>退出登录</a>
+              <a onClick={() =>
+                confirm({
+                  title: '是否确认退出登录?',
+                  content: '如退出登录下次重新登录需要重新进入游戏确认, 同时本设备也会从你的记录中删除.',
+                  okType: 'danger',
+                  onOk: () => {
+                    const fn = message.loading('退出登录中...')
+                    socket.emit('quit', (err?: string) => {
+                      fn()
+                      if (err) message.error(err, 5)
+                      else {
+                        localStorage.removeItem('token')
+                        localStorage.removeItem('uuid')
+                        setName(undefined)
+                        message.success('退出成功!')
+                      }
+                    })
+                  }
+                })}>退出登录</a>
             </Menu.Item>
           </Menu>)} placement='bottomRight'>
           <Avatar
             className='head'
             shape='square'
             size='large'
-            src={`https://minotar.net/helm/${store.name}/40.png`}
+            src={`https://minotar.net/helm/${name}/40.png`}
           />
         </Dropdown>)
         : (<Tooltip placement='bottomLeft' title='点击这里以登录' defaultVisible>
           <Avatar
             {...({ onClick: () => {
-              store.step = 0
+              setStep(0)
               setVisible(true)
             } } as any)}
             className='head'
@@ -65,24 +114,28 @@ const Login: React.FC = () => {
         footer={null}
         bodyStyle={{ textAlign: 'center' }}
       >
-        <Steps current={store.step} style={{ textAlign: 'left', marginBottom: 20 }}>
+        <Steps current={step} style={{ textAlign: 'left', marginBottom: 20 }}>
           <Step title='输入信息' icon={<UserOutlined />} />
           <Step title='验证' icon={<SolutionOutlined />} />
           <Step title='完成' icon={<SmileOutlined />} />
         </Steps>
-        {store.step === 0
+        {step === 0
           ? (<Form
             form={form}
-            onFinish={store.login}
+            onFinish={values => {
+              setStep(1)
+              socket.emit('login', values, err => {
+                if (!err) return
+                message.error(err, 5)
+                setStep(0)
+              })
+            }}
           >
             <Row gutter={12}>
               <Col span={24} md={10}>
-                <Item hasFeedback name='userName' rules={[{ required: true, message: '请选择你的游戏名!' }]}>
-                  <Select
-                    disabled={store.loginLoading}
-                    placeholder='请选择你的游戏名'
-                  >
-                    {players.map(it => <Select.Option key={it.name} value={it.name}>{it.name}</Select.Option>)}
+                <Item hasFeedback name='username' rules={[{ required: true, message: '请选择你的游戏名!' }]}>
+                  <Select placeholder='请选择你的游戏名'>
+                    {players.map(it => <Select.Option key={it} value={it}>{it}</Select.Option>)}
                   </Select>
                 </Item>
               </Col>
@@ -97,7 +150,6 @@ const Login: React.FC = () => {
                   ]}
                 >
                   <Input
-                    disabled={store.loginLoading}
                     prefix={<FlagOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
                     placeholder='设备标识'
                   />
@@ -105,7 +157,7 @@ const Login: React.FC = () => {
               </Col>
               <Col span={24} md={2}>
                 <Item>
-                  <Button type='primary' htmlType='submit' loading={store.loginLoading}>登录</Button>
+                  <Button type='primary' htmlType='submit' disabled={!players.length}>登录</Button>
                 </Item>
               </Col>
               <Col span={24}>
@@ -113,7 +165,7 @@ const Login: React.FC = () => {
               </Col>
             </Row>
           </Form>)
-          : store.step === 1 ? <Spin tip='请您进入NekoCraft服务器, 根据游戏中的提示完成验证' /> : <Result
+          : step === 1 ? <Spin tip='请您进入NekoCraft服务器, 根据游戏中的提示完成验证' /> : <Result
             status='success'
             title='成功登录!'
             extra={[<Button type='primary' key='0' onClick={closeModel}>返回</Button>]}

@@ -24,14 +24,14 @@
   width: 140px;
   position: absolute;
   background-size: contain;
-  background-image: url(/heart_background.png);
+  background-image: url(../assets/heart_background.png);
 }
 
 #home .players .health-full {
   height: 14px;
   position: absolute;
   background-size: contain;
-  background-image: url(/heart.png);
+  background-image: url(../assets/heart.png);
   transition: all 1s ease-in-out;
 }
 
@@ -41,7 +41,7 @@
   width: 140px;
   position: absolute;
   background-size: contain;
-  background-image: url(/food_background.png);
+  background-image: url(../assets/food_background.png);
 }
 
 #home .players .food-full {
@@ -49,7 +49,7 @@
   height: 14px;
   position: absolute;
   background-size: contain;
-  background-image: url(/food.png);
+  background-image: url(../assets/food.png);
   transition: all 1s ease-in-out;
 }
 

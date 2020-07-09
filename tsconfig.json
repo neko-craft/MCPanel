@@ -14,7 +14,6 @@
     "noImplicitAny": false,
     "strictNullChecks": false,
     "noEmit": true,
-    "downlevelIteration": true,
     "jsx": "react",
     "experimentalDecorators": true,
     "lib": [

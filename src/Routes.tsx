@@ -29,7 +29,7 @@ const routes: Array<{ path: string, icon: any, name: string, component: any }> =
   {
     path: '/list',
     icon: UnorderedListOutlined,
-    name: '封禁与白名单',
+    name: '玩家列表',
     component: List
   },
   {

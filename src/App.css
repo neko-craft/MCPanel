@@ -12,7 +12,7 @@
 
 #mcp-logo {
   height: 60px;
-  background-image: url(/logo192.png);
+  background-image: url(./assets/logo192.png);
   background-size: 60px;
   background-repeat: no-repeat;
   background-position: center;
