@@ -8,9 +8,6 @@ import zhCN from 'antd/es/locale/zh_CN'
 import * as moment from 'moment'
 import { ConfigProvider } from 'antd'
 
-if (location.protocol === 'https:') {
-  location.protocol = 'http:'
-}
 moment.locale('zh')
 
 ReactDOM.render(<ConfigProvider locale={zhCN}><App /></ConfigProvider>, document.getElementById('root'))

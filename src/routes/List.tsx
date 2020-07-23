@@ -71,7 +71,6 @@ const ListPage: React.FC = () => {
       list1.forEach(it => {
         it.lastLoginText = moment(it.lastLogin).format('YYYY/MM/DD HH:mm:ss')
         it.firstPlayedText = moment(it.firstPlayed).format('YYYY/MM/DD HH:mm:ss')
-        console.log(it.onlineTime)
         it.onlineTimeText = moment.duration(it.onlineTime / 20, 'seconds').humanize()
         if (it.name in obj) it.banned = true
       })

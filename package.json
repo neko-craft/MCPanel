@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
-  "homepage": "http://portal.nekocraft.net/",
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
     "@babel/core": "^7.10.4",
@@ -28,7 +27,7 @@
     "typescript": "3.9.6"
   },
   "scripts": {
-    "start": "parcel index.html --public-url .",
+    "start": "parcel index.html",
     "build": "parcel build index.html --public-url . --no-source-maps",
     "lint": "eslint src/**/*.{ts,tsx}",
     "fix": "eslint --fix src/**/*.{ts,tsx}"
