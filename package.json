@@ -27,7 +27,7 @@
     "typescript": "3.9.6"
   },
   "scripts": {
-    "start": "parcel index.html",
+    "start": "parcel index.html --https",
     "build": "parcel build index.html --public-url . --no-source-maps",
     "lint": "eslint src/**/*.{ts,tsx}",
     "fix": "eslint --fix src/**/*.{ts,tsx}"

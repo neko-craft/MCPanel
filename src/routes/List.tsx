@@ -117,7 +117,7 @@ const ListPage: React.FC = () => {
             columns={columns}
             dataSource={list}
             scroll={{ x: 'max-content' }}
-            pagination={false}
+            pagination={{ defaultPageSize: 30 }}
           />
         </Card>
       </Col>

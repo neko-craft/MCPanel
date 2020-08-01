@@ -24,27 +24,9 @@ jobs:
       - name: Build app
         run: yarn build
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: dist
-          path: dist
-
       - name: Deploy
         uses: crazy-max/ghaction-github-pages@v1
         with:
           build_dir: dist
-          committer_email: 764798966@qq.com
-          fqdn: user.neko-craft.com
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload to cos
-        uses: TencentCloud/cos-action@v1
-        with:
-          secret_id: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
-          secret_key: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
-          cos_bucket: ${{ secrets.COS_BUCKET }}
-          cos_region: ${{ secrets.COS_REGION }}
-          local_path: dist
-          clean: true
