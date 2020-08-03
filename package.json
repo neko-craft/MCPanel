@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "parcel index.html --https",
-    "build": "parcel build index.html --public-url . --no-source-maps",
+    "build": "parcel build index.html --public-url .",
     "lint": "eslint src/**/*.{ts,tsx}",
     "fix": "eslint --fix src/**/*.{ts,tsx}"
   },
