@@ -5,6 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
+    "@parcel/transformer-image": "2.0.0-nightly.2312",
+    "@parcel/transformer-mdx": "2.0.0-nightly.2312",
     "@types/moment": "^2.13.0",
     "@types/node": "15.6.1",
     "@types/react": "17.0.8",
@@ -40,8 +42,6 @@
   },
   "devDependencies": {
     "@mdx-js/react": "^1.6.22",
-    "@parcel/transformer-image": "2.0.0-nightly.2312",
-    "@parcel/transformer-mdx": "2.0.0-nightly.2312",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "eslint": "^7.27.0",
