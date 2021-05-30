@@ -7,7 +7,7 @@ import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined'
 import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined'
 import Login from './components/Login'
 
-const { Header, Sider, Content } = Layout
+const { Header, Sider, Content } = Layout as any
 
 const App: React.FC = () => {
   const [collapsed, updateCollapsed] = useState(window.innerWidth < 992)
@@ -54,7 +54,8 @@ const App: React.FC = () => {
           <Content
             style={{
               minHeight: 280,
-              marginTop: 64
+              marginTop: 64,
+              overflow: 'hidden auto'
             }}
           >
             <BackTop />

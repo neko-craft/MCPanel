@@ -10,8 +10,6 @@ interface Player {
   afk?: boolean
 }
 
-const text = { __html: require('../assets/notice.md') }
-
 const Home: React.FC = () => {
   const [tps, setTps] = useState('20.00')
   const [players, setPlayers] = useState<Array<Player>>([])
@@ -82,7 +80,7 @@ const Home: React.FC = () => {
         </Card>
       </Col>
       <Col span={24} sm={12}>
-        <Card title='公告' hoverable><div dangerouslySetInnerHTML={text} /></Card>
+        <Card title='公告' hoverable>Hello, NekoCraft!</Card>
       </Col>
     </Row>
   )

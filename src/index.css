@@ -5,15 +5,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 #root, section {
-  height: 100%;
+  height: 100% !important;
+  overflow: hidden;
 }
 
 .no-padding .ant-drawer-body, .no-padding .ant-drawer-header {

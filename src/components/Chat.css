@@ -2,7 +2,7 @@
   float: right;
   top: 18px;
   right: 78px;
-  position: absolute;
+  position: absolute !important;
   z-index: 1;
 }
 
