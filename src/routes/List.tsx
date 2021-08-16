@@ -61,7 +61,7 @@ const ListPage: React.FC = () => {
   useEffect(() => {
     socket.emit('list', (listJson: string, banListJson: string) => {
       const banList1: BanInfo[] = JSON.parse(banListJson)
-      const obj: Record<string, void> = { }
+      const obj: Record<string, null> = { }
       banList1.forEach(it => {
         obj[it.name] = null
         it.from = moment(it.from).format('LLLL')

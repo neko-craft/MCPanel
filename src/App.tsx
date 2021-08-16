@@ -7,8 +7,6 @@ import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined'
 import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined'
 import Login from './components/Login'
 
-const { Header, Sider, Content } = Layout as any
-
 const App: React.FC = () => {
   const [collapsed, updateCollapsed] = useState(window.innerWidth < 992)
   const [drawer, updateDrawer] = useState(false)
@@ -16,7 +14,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Layout id='mcp-app'>
-        <Sider
+        <Layout.Sider
           style={{ display: drawer ? 'none' : '' }}
           trigger={null}
           collapsible
@@ -27,7 +25,7 @@ const App: React.FC = () => {
         >
           <div id='mcp-logo' />
           <Menus theme='dark' />
-        </Sider>
+        </Layout.Sider>
         <Drawer
           title={<div id='mcp-logo' />}
           className='no-padding'
@@ -39,7 +37,7 @@ const App: React.FC = () => {
           <Menus />
         </Drawer>
         <Layout>
-          <Header style={{
+          <Layout.Header style={{
             background: '#fff',
             padding: 0,
             position: 'fixed',
@@ -49,9 +47,9 @@ const App: React.FC = () => {
             {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
               { className: 'trigger', onClick () { updateCollapsed(!collapsed) } } as any)}
             <Typography.Title level={3}>NekoCraft</Typography.Title>
-          </Header>
+          </Layout.Header>
           <Login />
-          <Content
+          <Layout.Content
             style={{
               minHeight: 280,
               marginTop: 64,
@@ -60,7 +58,7 @@ const App: React.FC = () => {
           >
             <BackTop />
             <Routes />
-          </Content>
+          </Layout.Content>
         </Layout>
       </Layout>
     </Router>

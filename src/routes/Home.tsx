@@ -21,7 +21,7 @@ const Home: React.FC = () => {
       setVersion(ver)
     }
     socket.on('status', fn).emit('getStatus')
-    return () => socket.off('status', fn)
+    return () => void socket.off('status', fn)
   }, [])
 
   return (
