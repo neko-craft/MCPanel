@@ -11,18 +11,18 @@ jobs:
 
     steps:
       - name: Check out git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
-      - name: Install Node.js and yarn
-        uses: actions/setup-node@v1
+      - name: Install Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: 12
 
       - name: Install dependencies
-        run: yarn --prod
+        run: npm install --prod
 
       - name: Build app
-        run: yarn build
+        run: npm run build
 
       - name: Deploy
         uses: crazy-max/ghaction-github-pages@v2

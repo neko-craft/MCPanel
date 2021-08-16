@@ -13,7 +13,7 @@ const Maps: React.FC = () => {
           width='100%'
           height='100%'
           frameBorder='none'
-          src='https://nekomaps.apisium.cn/'
+          src='https://map.nekocraft.apisium.cn/'
         />
       </Spin>
     </div>
