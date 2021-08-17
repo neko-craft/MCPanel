@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-curly-newline, jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import Item from 'antd/es/form/FormItem'
 import { Avatar, Menu, Modal, Steps, Form, Input, message,
@@ -26,7 +25,7 @@ const Login: React.FC = () => {
     const token = localStorage.getItem('token')
     const uuid = localStorage.getItem('uuid')
     if (!token || !uuid) return
-    socket.emit('token', { token, uuid }, (err: string | undefined, name: string, banned: boolean) => {
+    socket.emit('token', uuid, token, (err: string | undefined, name: string, banned: boolean) => {
       if (err) {
         message.error(err, 5)
         localStorage.removeItem('token')
@@ -40,7 +39,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     getInfo()
-    const fn = (json: string) => setPlayers(JSON.parse(json).map(it => it.name))
+    const fn = (json: string) => setPlayers(JSON.parse(json).map((it: any) => it.name))
     const fn2 = (err: string | undefined, token: string, uuid: string) => {
       if (err) {
         message.error(err, 5)
@@ -53,7 +52,7 @@ const Login: React.FC = () => {
       }
     }
     socket.on('status', fn).on('login', fn2).on('reconnect', getInfo)
-    return () => socket.off('status', fn).off('login', fn2).off('reconnect', getInfo)
+    return () => void socket.off('status', fn).off('login', fn2).off('reconnect', getInfo)
   }, [])
 
   return (
@@ -122,9 +121,9 @@ const Login: React.FC = () => {
         {step === 0
           ? (<Form
             form={form}
-            onFinish={values => {
+            onFinish={({ name, device }) => {
               setStep(1)
-              socket.emit('login', values, err => {
+              socket.emit('login', name, device, (err?: string) => {
                 if (!err) return
                 message.error(err, 5)
                 setStep(0)
@@ -133,7 +132,7 @@ const Login: React.FC = () => {
           >
             <Row gutter={12}>
               <Col span={24} md={10}>
-                <Item hasFeedback name='username' rules={[{ required: true, message: '请选择你的游戏名!' }]}>
+                <Item hasFeedback name='name' rules={[{ required: true, message: '请选择你的游戏名!' }]}>
                   <Select placeholder='请选择你的游戏名'>
                     {players.map(it => <Select.Option key={it} value={it}>{it}</Select.Option>)}
                   </Select>
@@ -142,16 +141,16 @@ const Login: React.FC = () => {
               <Col span={24} md={10}>
                 <Item
                   hasFeedback
-                  name='name'
+                  name='device'
                   rules={[
-                    { required: true, message: '请输入当前设备标识!' },
-                    { min: 2, message: '设备标识不能少于2位!' },
-                    { max: 16, message: '设备标识不能大于16位!' }
+                    { required: true, message: '请输入当前设备名!' },
+                    { min: 1, message: '设备名不能少于1位!' },
+                    { max: 16, message: '设备名不能大于16位!' }
                   ]}
                 >
                   <Input
                     prefix={<FlagOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-                    placeholder='设备标识'
+                    placeholder='给当前设备起个名字'
                   />
                 </Item>
               </Col>
@@ -161,15 +160,17 @@ const Login: React.FC = () => {
                 </Item>
               </Col>
               <Col span={24}>
-                <Item extra='请登入MC服务器再进行操作.' children={<></>} />
+                <Item extra='请登入MC服务器再进行操作.'><></></Item>
               </Col>
             </Row>
           </Form>)
-          : step === 1 ? <Spin tip='请您进入NekoCraft服务器, 根据游戏中的提示完成验证' /> : <Result
-            status='success'
-            title='成功登录!'
-            extra={[<Button type='primary' key='0' onClick={closeModel}>返回</Button>]}
-          />
+          : step === 1
+            ? <Spin tip='请您进入NekoCraft服务器, 根据游戏中的提示完成验证' />
+            : <Result
+              status='success'
+              title='成功登录!'
+              extra={[<Button type='primary' key='0' onClick={closeModel}>返回</Button>]}
+            />
         }
       </Modal>
     </>

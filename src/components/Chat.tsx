@@ -7,8 +7,8 @@ import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { Badge, Drawer, Input, Avatar, Card, Tag, message } from 'antd'
 import socket from '../io'
 
-const Chat: React.FC<{ playerName: string, banned: boolean }> = ({ playerName, banned }) => {
-  const ref = useRef<HTMLDivElement>()
+const Chat: React.FC<{ playerName?: string, banned: boolean }> = ({ playerName, banned }) => {
+  const ref = useRef<HTMLDivElement | null>(null)
   const ref2 = useRef<string>()
   ref2.current = playerName
   const [visible, _setVisible] = useState(false)
@@ -20,7 +20,7 @@ const Chat: React.FC<{ playerName: string, banned: boolean }> = ({ playerName, b
 
   const setVisible = (value: boolean) => {
     setHasNew(0)
-    if (value) process.nextTick(() => (ref.current.scrollTop = ref.current.scrollHeight))
+    if (value) process.nextTick(() => ref.current && (ref.current.scrollTop = ref.current.scrollHeight))
     _setVisible(value)
   }
   useEffect(() => {
@@ -60,7 +60,7 @@ const Chat: React.FC<{ playerName: string, banned: boolean }> = ({ playerName, b
       update[1](++i)
     }
     socket.on('playerAction', fn0)
-    return () => socket.off('playerAction', fn0)
+    return () => void socket.off('playerAction', fn0)
   }, [])
 
   return (

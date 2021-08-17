@@ -8,10 +8,6 @@
     "@mdx-js/react": "^1.6.22",
     "@parcel/transformer-image": "2.0.0-rc.0",
     "@parcel/transformer-mdx": "2.0.0-rc.0",
-    "@types/node": "16.6.1",
-    "@types/react": "^17.0.18",
-    "@types/react-dom": "17.0.9",
-    "@types/react-router-dom": "^5.1.8",
     "antd": "^4.16.12",
     "marked": "^3.0.0",
     "moment": "^2.29.1",
@@ -50,6 +46,10 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-react": "^7.24.0"
+    "eslint-plugin-react": "^7.24.0",
+    "@types/node": "16.6.1",
+    "@types/react": "^17.0.18",
+    "@types/react-dom": "17.0.9",
+    "@types/react-router-dom": "^5.1.8"
   }
 }
