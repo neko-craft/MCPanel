@@ -112,7 +112,7 @@ const Login: React.FC = () => {
             form={form}
             onFinish={({ name, device }) => {
               setStep(1)
-              socket.emit('login', name, device, (err: string | null, token: string, uuid: string) => {
+              socket.emit('login', name, device, (err: string | false, token: string, uuid: string) => {
                 if (err) {
                   message.error(err, 5)
                   setStep(0)

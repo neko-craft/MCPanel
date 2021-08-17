@@ -1,5 +1,5 @@
 import './List.css'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import { Row, Col, Card, List, Avatar, Popover, Button, Tag, Table } from 'antd'
 import socket from '../io'
@@ -60,18 +60,18 @@ const ListPage: React.FC = () => {
   const [banList, setBanList] = useState<BanInfo[]>([])
   useEffect(() => {
     socket.emit('list', (listJson: string, banListJson: string) => {
-      const banList1: BanInfo[] = JSON.parse(banListJson)
+      const banList1: BanInfo[] = JSON.parse(banListJson).sort((a: any, b: any) => b.from - a.from)
       const obj: Record<string, null> = { }
       banList1.forEach(it => {
         obj[it.name] = null
-        it.from = moment(it.from).format('LLLL')
-        if (it.to) it.to = moment(it.to).format('LLLL')
+        it.from = dayjs(it.from).format('LLLL')
+        if (it.to) it.to = dayjs(it.to).format('LLLL')
       })
       const list1: PlayerInfo[] = JSON.parse(listJson)
       list1.forEach(it => {
-        it.lastLoginText = moment(it.lastLogin).format('YYYY/MM/DD HH:mm:ss')
-        it.firstPlayedText = moment(it.firstPlayed).format('YYYY/MM/DD HH:mm:ss')
-        it.onlineTimeText = moment.duration(it.onlineTime / 20, 'seconds').humanize()
+        it.lastLoginText = dayjs(it.lastLogin).format('YYYY/MM/DD HH:mm:ss')
+        it.firstPlayedText = dayjs(it.firstPlayed).format('YYYY/MM/DD HH:mm:ss')
+        it.onlineTimeText = dayjs.duration(it.onlineTime / 20, 'seconds').humanize()
         if (it.name in obj) it.banned = true
       })
       setList(list1)
@@ -84,6 +84,7 @@ const ListPage: React.FC = () => {
       <Col span={24} sm={12}>
         <Card title='封禁列表' className='card'>
           <List
+            pagination={{ defaultPageSize: 30, pageSizeOptions: ['30', '50', '100'], style: { marginBottom: 20 } }}
             itemLayout='horizontal'
             dataSource={banList}
             renderItem={it => (
@@ -117,7 +118,7 @@ const ListPage: React.FC = () => {
             columns={columns}
             dataSource={list}
             scroll={{ x: 'max-content' }}
-            pagination={{ defaultPageSize: 30 }}
+            pagination={{ defaultPageSize: 30, pageSizeOptions: ['30', '50', '100'], style: { marginRight: 16 } }}
           />
         </Card>
       </Col>

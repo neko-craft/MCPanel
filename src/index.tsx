@@ -1,14 +1,18 @@
 /* eslint-disable no-restricted-globals */
 import 'antd/dist/antd.css'
-import 'moment/locale/zh-cn'
+import 'dayjs/locale/zh-cn'
+import './index.css'
+import dayjs from 'dayjs'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
 import App from './App'
 import zhCN from 'antd/es/locale/zh_CN'
-import * as moment from 'moment'
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { ConfigProvider } from 'antd'
 
-moment.locale('zh')
+dayjs.locale('zh-cn')
+dayjs.extend(duration)
+dayjs.extend(relativeTime)
 
 ReactDOM.render(<ConfigProvider locale={zhCN}><App /></ConfigProvider>, document.getElementById('root'))
