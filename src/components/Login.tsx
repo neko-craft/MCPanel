@@ -40,19 +40,8 @@ const Login: React.FC = () => {
   useEffect(() => {
     getInfo()
     const fn = (json: string) => setPlayers(JSON.parse(json).map((it: any) => it.name))
-    const fn2 = (err: string | undefined, token: string, uuid: string) => {
-      if (err) {
-        message.error(err, 5)
-        setStep(0)
-      } else {
-        localStorage.setItem('token', token)
-        localStorage.setItem('uuid', uuid)
-        getInfo()
-        setStep(2)
-      }
-    }
-    socket.on('status', fn).on('login', fn2).on('reconnect', getInfo)
-    return () => void socket.off('status', fn).off('login', fn2).off('reconnect', getInfo)
+    socket.on('status', fn).on('reconnect', getInfo)
+    return () => void socket.off('status', fn).off('reconnect', getInfo)
   }, [])
 
   return (
@@ -123,10 +112,16 @@ const Login: React.FC = () => {
             form={form}
             onFinish={({ name, device }) => {
               setStep(1)
-              socket.emit('login', name, device, (err?: string) => {
-                if (!err) return
-                message.error(err, 5)
-                setStep(0)
+              socket.emit('login', name, device, (err: string | null, token: string, uuid: string) => {
+                if (err) {
+                  message.error(err, 5)
+                  setStep(0)
+                } else {
+                  localStorage.setItem('token', token)
+                  localStorage.setItem('uuid', uuid)
+                  getInfo()
+                  setStep(2)
+                }
               })
             }}
           >
