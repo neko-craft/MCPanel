@@ -64,8 +64,8 @@ const ListPage: React.FC = () => {
       const obj: Record<string, null> = { }
       banList1.forEach(it => {
         obj[it.name] = null
-        it.from = dayjs(it.from).format('LLLL')
-        if (it.to) it.to = dayjs(it.to).format('LLLL')
+        it.from = dayjs(it.from).format('YYYY/MM/DD HH:mm:ss')
+        if (it.to) it.to = dayjs(it.to).format('YYYY/MM/DD HH:mm:ss')
       })
       const list1: PlayerInfo[] = JSON.parse(listJson)
       list1.forEach(it => {
